@@ -18,7 +18,7 @@ df[' B6'] = df[' B6'].apply(b16)
 df[' B7'] = df[' B7'].apply(b16)
 
 df = df.set_index('Millis')
-
+print(df.loc[df[' ID'] == '534', ' B0'])
 plt.plot(df.loc[df[' ID'] == '534', ' B0'])
 plt.ylabel('B0')
 plt.xlabel('Milliseconds')
