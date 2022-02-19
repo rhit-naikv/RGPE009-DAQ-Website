@@ -2,6 +2,7 @@ from numpy import int64
 import pandas as pd
 import matplotlib.pyplot as plt
 import math
+import streamlit as st
 
 #CLASSES
 class Message:
@@ -10,10 +11,14 @@ class Message:
     def plot(self):
         try:
             pt = pd.pivot_table(self.df, values=self.df.columns.drop('ID').drop('B0').drop('B1').drop('B2').drop('B3').drop('B4').drop('B5').drop('B6').drop('B7'), index='Millis')
-            plt.axes(pt.plot())
-            plt.show()
+            # print(pt)
+            # fig, ax = plt.subplots()
+            # ax.axis()
+            # st.pyplot(fig)
+            st.pyplot(plt.axes(pt.plot()).figure)
         except(TypeError):
             print("This message doesn't have any data")
+            st.error("This message doesn't have any data")
 
 class Message500(Message):
     def __init__(self, df):
@@ -291,6 +296,62 @@ class Message53C(Message):
         self.df['BMM Batery Voltage'] = (self.df['B1'].apply(lambda x: x[4:8]) + self.df['B0']).apply(lambda x: int(x, 2))
         self.df['BMM Car Current'] = (self.df['B3'].apply(lambda x: x[4:8]) + self.df['B2']).apply(lambda x: int(x, 2))
 
+class Message540(Message):
+    def __init__(self, df):
+        Message.__init__(self, df, '540')
+        self.df['Engine PDM Channel0'] = (self.df['B1'].apply(lambda x: x[4:8]) + self.df['B0']).apply(lambda x: int(x, 2))
+        self.df['Engine PDM Channel1'] = (self.df['B2'] + self.df['B1'].apply(lambda x: x[0:4])).apply(lambda x: int(x, 2))
+        self.df['Engine PDM Channel2'] = (self.df['B4'].apply(lambda x: x[4:8]) + self.df['B3']).apply(lambda x: int(x, 2))
+        self.df['Engine PDM Channel3'] = (self.df['B5'] + self.df['B4'].apply(lambda x: x[0:4])).apply(lambda x: int(x, 2))
+
+class Message544(Message):
+    def __init__(self, df):
+        Message.__init__(self, df, '544')
+        self.df['Engine PDM Channel4'] = (self.df['B1'].apply(lambda x: x[4:8]) + self.df['B0']).apply(lambda x: int(x, 2))
+        self.df['Engine PDM Channel5'] = (self.df['B2'] + self.df['B1'].apply(lambda x: x[0:4])).apply(lambda x: int(x, 2))
+        self.df['Engine PDM Channel6'] = (self.df['B4'].apply(lambda x: x[4:8]) + self.df['B3']).apply(lambda x: int(x, 2))
+        self.df['Engine PDM Channel7'] = (self.df['B5'] + self.df['B4'].apply(lambda x: x[0:4])).apply(lambda x: int(x, 2))
+
+class Message548(Message):
+    def __init__(self, df):
+        Message.__init__(self, df, '548')
+        self.df['Actuation PDM Channel0'] = (self.df['B1'].apply(lambda x: x[4:8]) + self.df['B0']).apply(lambda x: int(x, 2))
+        self.df['Actuation PDM Channel1'] = (self.df['B2'] + self.df['B1'].apply(lambda x: x[0:4])).apply(lambda x: int(x, 2))
+        self.df['Actuation PDM Channel2'] = (self.df['B4'].apply(lambda x: x[4:8]) + self.df['B3']).apply(lambda x: int(x, 2))
+        self.df['Actuation PDM Channel3'] = (self.df['B5'] + self.df['B4'].apply(lambda x: x[0:4])).apply(lambda x: int(x, 2))
+
+class Message54C(Message):
+    def __init__(self, df):
+        Message.__init__(self, df, '54C')
+        self.df['Actuation PDM Channel4'] = (self.df['B1'].apply(lambda x: x[4:8]) + self.df['B0']).apply(lambda x: int(x, 2))
+        self.df['Actuation PDM Channel5'] = (self.df['B2'] + self.df['B1'].apply(lambda x: x[0:4])).apply(lambda x: int(x, 2))
+        self.df['Actuation PDM Channel6'] = (self.df['B4'].apply(lambda x: x[4:8]) + self.df['B3']).apply(lambda x: int(x, 2))
+        self.df['Actuation PDM Channel7'] = (self.df['B5'] + self.df['B4'].apply(lambda x: x[0:4])).apply(lambda x: int(x, 2))
+    
+class Message550(Message):
+    def __init__(self, df):
+        Message.__init__(self, df, '550')
+        self.df['Power Board Center Temperature'] = self.df['B0'].apply(lambda x: int(x, 2))
+        self.df['Power Board Edge Temperature'] = self.df['B1'].apply(lambda x: int(x, 2))
+        self.df['Shield Temperature'] = self.df['B2'].apply(lambda x: int(x, 2))
+        self.df['LOW_BATT'] = self.df['B3'].apply(lambda x: x[3]).apply(lambda x: int(x, 2))
+        self.df['CRANK'] = self.df['B3'].apply(lambda x: x[4]).apply(lambda x: int(x, 2))
+        self.df['ESTOP Failure'] = self.df['B3'].apply(lambda x: x[5]).apply(lambda x: int(x, 2))
+        self.df['ESTOP'] = self.df['B3'].apply(lambda x: x[6]).apply(lambda x: int(x, 2))
+        self.df['CRITICAL CHANNEL FAILURE'] = self.df['B3'].apply(lambda x: x[7]).apply(lambda x: int(x, 2))
+
+class Message554(Message):
+    def __init__(self, df):
+        Message.__init__(self, df, '554')
+        self.df['Power Board Center Temperature'] = self.df['B0'].apply(lambda x: int(x, 2))
+        self.df['Power Board Edge Temperature'] = self.df['B1'].apply(lambda x: int(x, 2))
+        self.df['Shield Temperature'] = self.df['B2'].apply(lambda x: int(x, 2))
+        self.df['LOW_BATT'] = self.df['B3'].apply(lambda x: x[3]).apply(lambda x: int(x, 2))
+        self.df['CRANK'] = self.df['B3'].apply(lambda x: x[4]).apply(lambda x: int(x, 2))
+        self.df['ESTOP Failure'] = self.df['B3'].apply(lambda x: x[5]).apply(lambda x: int(x, 2))
+        self.df['ESTOP'] = self.df['B3'].apply(lambda x: x[6]).apply(lambda x: int(x, 2))
+        self.df['CRITICAL CHANNEL FAILURE'] = self.df['B3'].apply(lambda x: x[7]).apply(lambda x: int(x, 2))
+
 
 
 
@@ -329,7 +390,26 @@ def preprocessData(fileName):
     
     return df
 
+
+# START OF PROGRAM
+
 df = preprocessData('log01.csv')
-message = Message538(df)
-print(df.columns)
-message.plot()
+
+option = st.selectbox('Select Message ID', 
+                      ('500: Front Control Button States', '504: Steering Wheel Button States', 
+                       '508: Engine RPM/TPS/Flags', '509: Engine Map/AFR/Fuel Pressure', 
+                       '50C: Brake Pressure', '50D: Front Accel X, Y',
+                       '50E: Front Gyro Roll, Pitch', '50F: Front Gyro Yaw, Accel Z', '510: Clutch Position', 
+                       '511: Middle Accel X, Y', '512: Wheel Speeds, front', '513: Wheel Speeds, rear', 
+                       '514: Shift Position', '515: Middle Gyro Roll, Pitch', '516: Middle Gyro Yaw, Accel Z', 
+                       '517: Rear Accel X, Y', '518: ARBF Position', '519: Rear Gyro Roll, Pitch', 
+                       '51A: Rear Gyro Yaw, Accel Z', '51B: Front Left Tire Temps', '51C: ARBR Position', 
+                       '51D: Front Right Tire Temps', '51E: Rear Left Tire Temps', '51F: Rear Right Tire Temps', 
+                       '520: Engine PDM Output Status', '524: Actuation PDM Output Status', 
+                       '528: Engine PDM Missing Messages', '52C: Actuation PDM Missing Messages', 
+                       '530: Front Control Missing Messages', '534: Engine PDM Battery Voltage', 
+                       '538: Other Engine Data', '53C: BMM Battery Voltage and Current', '540: Engine PDM Channel current 0-3', 
+                       '544: Engine PDM Channel current 4-7', '548: Actuation PDM Channel current 0-3', 
+                       '54C: Actuation PDM Channel current 4-7', '550: Engine PDM Status', '554: Actuation PDM Status'))
+                    
+eval('Message' + option[0:3] + '(df).plot()')
